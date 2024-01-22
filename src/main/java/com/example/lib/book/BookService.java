@@ -4,6 +4,7 @@ import com.example.lib.exceptions.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookService {
@@ -26,12 +27,12 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book updateBook(String id, Book book) {
-        if (bookRepository.existsById(id)) {
-            book.setId(id);
-            return bookRepository.save(book);
-        }
-        return null;
+    public Book updateBook(Long id, Map<String, Object> updates) {
+        Book book = bookRepository.findById(id.toString()).orElseThrow(() -> new BookNotFoundException(id.toString()));
+
+        applyUpdatesToBook(book, updates);
+
+        return bookRepository.save(book);
     }
 
     public boolean deleteBook(String id) {
@@ -40,5 +41,34 @@ public class BookService {
             return true;
         }
         return false;
+    }
+
+    private void applyUpdatesToBook(Book book, Map<String, Object> updates) {
+        for (Map.Entry<String, Object> entry : updates.entrySet()) {
+            switch (entry.getKey()) {
+                case "title":
+                    if (entry.getValue() instanceof String) {
+                        book.setTitle((String) entry.getValue());
+                    }
+                    break;
+                case "author":
+                    if (entry.getValue() instanceof String) {
+                        book.setAuthor((String) entry.getValue());
+                    }
+                    break;
+                case "publicationYear":
+                    if (entry.getValue() instanceof Integer) {
+                        book.setPublicationYear((Integer) entry.getValue());
+                    }
+                    break;
+                case "ISBN":
+                    if (entry.getValue() instanceof String) {
+                        book.setISBN((String) entry.getValue());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

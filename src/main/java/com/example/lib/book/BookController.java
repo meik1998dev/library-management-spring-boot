@@ -1,9 +1,11 @@
 package com.example.lib.book;
 
+import com.example.lib.exceptions.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/books")
@@ -38,9 +40,13 @@ public class BookController {
 
     // Update an existing book's information
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable String id, @RequestBody Book book) {
-        Book updatedBook = bookService.updateBook(id, book);
-        return updatedBook != null ? ResponseEntity.ok(updatedBook) : ResponseEntity.notFound().build();
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        try {
+            Book updatedBook = bookService.updateBook(id, updates);
+            return ResponseEntity.ok(updatedBook);
+        } catch (BookNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // Remove a book from the library
