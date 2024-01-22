@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.*;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BookNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleBookNotFound(BookNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    protected ResponseEntity<Object> handleBookNotFound(BookNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        return buildResponseEntity(errorResponse);
     }
+
+    private ResponseEntity<Object> buildResponseEntity(ErrorResponse errorResponse) {
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
+
 }

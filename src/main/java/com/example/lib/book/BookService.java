@@ -36,11 +36,12 @@ public class BookService {
     }
 
     public boolean deleteBook(String id) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.deleteById(id);
-            return true;
+        if (!bookRepository.existsById(id)) {
+            throw new BookNotFoundException(id);
         }
-        return false;
+
+        bookRepository.deleteById(id);
+        return true;
     }
 
     private void applyUpdatesToBook(Book book, Map<String, Object> updates) {

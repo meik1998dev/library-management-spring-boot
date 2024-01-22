@@ -28,7 +28,7 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable String id) {
         Book book = bookService.findBookById(id);
-        return book != null ? ResponseEntity.ok(book) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(book);
     }
 
     // Add a new book to the library
@@ -41,18 +41,14 @@ public class BookController {
     // Update an existing book's information
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        try {
-            Book updatedBook = bookService.updateBook(id, updates);
-            return ResponseEntity.ok(updatedBook);
-        } catch (BookNotFoundException ex) {
-            return ResponseEntity.notFound().build();
-        }
+        Book updatedBook = bookService.updateBook(id, updates);
+        return ResponseEntity.ok(updatedBook);
     }
 
     // Remove a book from the library
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable String id) {
-        boolean isDeleted = bookService.deleteBook(id);
-        return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        bookService.deleteBook(id);
+        return ResponseEntity.ok().build();
     }
 }
