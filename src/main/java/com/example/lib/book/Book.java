@@ -1,11 +1,7 @@
 package com.example.lib.book;
 
-
 import com.example.lib.borrowingRecord.BorrowingRecord;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -13,6 +9,7 @@ import java.util.List;
 @Table(name = "books")
 public class Book {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  String id;
     private  String title;
     private  String author;
@@ -33,5 +30,9 @@ public class Book {
 
     public Book() {
 
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
