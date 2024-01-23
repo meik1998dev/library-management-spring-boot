@@ -20,6 +20,12 @@ public class GlobalExceptionHandler {
         return buildResponseEntity(errorResponse);
     }
 
+    @ExceptionHandler(PatronNotFoundException.class)
+    protected ResponseEntity<Object> handlePatronNotFound(PatronNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        return buildResponseEntity(errorResponse);
+    }
+
     private ResponseEntity<Object> buildResponseEntity(ErrorResponse errorResponse) {
         return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
