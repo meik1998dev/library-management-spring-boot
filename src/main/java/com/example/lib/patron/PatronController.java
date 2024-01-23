@@ -1,5 +1,6 @@
 package com.example.lib.patron;
 
+import com.example.lib.ApiResponse.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,36 +22,41 @@ public class PatronController {
 
     // Retrieve a list of all patrons
     @GetMapping
-    public ResponseEntity<List<Patron>> getAllPatrons() {
+    public ResponseEntity<ApiResponse> getAllPatrons() {
         List<Patron> patrons = patronService.findAllPatrons();
-        return ResponseEntity.ok(patrons);
+        ApiResponse apiResponse = new ApiResponse(true, null , patrons );
+        return ResponseEntity.ok(apiResponse);
     }
 
     // Retrieve details of a specific patron by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Patron> getPatronById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> getPatronById(@PathVariable Long id) {
         Patron patron = patronService.findPatronById(id);
-        return ResponseEntity.ok(patron);
+        ApiResponse apiResponse = new ApiResponse(true, null , patron );
+        return ResponseEntity.ok(apiResponse);
     }
 
     // Add a new patron to the system
     @PostMapping
-    public ResponseEntity<Patron> addPatron(@Valid @RequestBody Patron patron) {
+    public ResponseEntity<ApiResponse> addPatron(@Valid @RequestBody Patron patron) {
         Patron savedPatron = patronService.addPatron(patron);
-        return ResponseEntity.ok(savedPatron);
+        ApiResponse apiResponse = new ApiResponse(true, "New patron added successfully" , savedPatron );
+        return ResponseEntity.ok(apiResponse);
     }
 
     // Update an existing patron's information
     @PutMapping("/{id}")
-    public ResponseEntity<Patron> updatePatron(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<ApiResponse> updatePatron(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         Patron updatedPatron = patronService.updatePatron(id, updates);
-        return ResponseEntity.ok(updatedPatron);
+        ApiResponse apiResponse = new ApiResponse(true, "patron updated successfully" , updatedPatron );
+        return ResponseEntity.ok(apiResponse);
     }
 
     // Remove a patron from the system
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePatron(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> deletePatron(@PathVariable Long id) {
         patronService.deletePatron(id);
-        return ResponseEntity.ok().build();
+        ApiResponse apiResponse = new ApiResponse(true, "patron deleted successfully"  );
+        return ResponseEntity.ok(apiResponse);
     }
 }

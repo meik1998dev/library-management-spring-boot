@@ -1,5 +1,6 @@
 package com.example.lib.book;
 
+import com.example.lib.ApiResponse.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,36 +20,41 @@ public class BookController {
 
     // Retrieve a list of all books
     @GetMapping
-    public ResponseEntity<List<Book>> getAllBooks() {
+    public ResponseEntity<?> getAllBooks() {
         List<Book> books = bookService.findAllBooks();
-        return ResponseEntity.ok(books);
+        ApiResponse apiResponse = new ApiResponse(true, null , books );
+        return ResponseEntity.ok(apiResponse);
     }
 
     // Retrieve details of a specific book by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse> getBookById(@PathVariable String id) {
         Book book = bookService.findBookById(id);
-        return ResponseEntity.ok(book);
+        ApiResponse apiResponse = new ApiResponse(true, null , book );
+        return ResponseEntity.ok(apiResponse);
     }
 
     // Add a new book to the library
     @PostMapping
-    public ResponseEntity<Book> addBook(@Valid @RequestBody Book book) {
+    public ResponseEntity<ApiResponse> addBook(@Valid @RequestBody Book book) {
         Book savedBook = bookService.addBook(book);
-        return ResponseEntity.ok(savedBook);
+        ApiResponse apiResponse = new ApiResponse(true, "Book created successfully" , savedBook );
+        return ResponseEntity.ok(apiResponse);
     }
 
     // Update an existing book's information
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id,@RequestBody Map<String, Object> updates) {
+    public ResponseEntity<ApiResponse> updateBook(@PathVariable Long id,@RequestBody Map<String, Object> updates) {
         Book updatedBook = bookService.updateBook(id, updates);
-        return ResponseEntity.ok(updatedBook);
+        ApiResponse apiResponse = new ApiResponse(true, "Book updated successfully" , updatedBook );
+        return ResponseEntity.ok(apiResponse);
     }
 
     // Remove a book from the library
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable String id) {
+    public ResponseEntity<ApiResponse> deleteBook(@PathVariable String id) {
         bookService.deleteBook(id);
-        return ResponseEntity.ok().build();
+        ApiResponse apiResponse = new ApiResponse(true, "Book deleted successfully" );
+        return ResponseEntity.ok(apiResponse);
     }
 }
