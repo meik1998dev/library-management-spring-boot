@@ -3,12 +3,14 @@ package com.example.lib.exceptions;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ErrorResponse {
     private HttpStatus status;
     private String message;
     private LocalDateTime timestamp;
     private String debugMessage;
+    private List<ValidationErrorResponse> errors;
 
     public ErrorResponse() {
         timestamp = LocalDateTime.now();
@@ -33,7 +35,11 @@ public class ErrorResponse {
         this.debugMessage = ex.getLocalizedMessage();
     }
 
-    // Getters and Setters
+    public ErrorResponse(HttpStatus status, List<ValidationErrorResponse> errors) {
+        this();
+        this.status = status;
+        this.errors = errors;
+    }
 
     public HttpStatus getStatus() {
         return status;
@@ -65,5 +71,13 @@ public class ErrorResponse {
 
     public void setDebugMessage(String debugMessage) {
         this.debugMessage = debugMessage;
+    }
+
+    public List<ValidationErrorResponse> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<ValidationErrorResponse> errors) {
+        this.errors = errors;
     }
 }

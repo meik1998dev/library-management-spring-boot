@@ -2,6 +2,9 @@ package com.example.lib.book;
 
 import com.example.lib.borrowingRecord.BorrowingRecord;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -11,8 +14,12 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Title cannot be blank")
+    @Size(max = 100, message = "Title must not exceed 100 characters")
     private String title;
+    @NotBlank(message = "Author cannot be blank")
     private String author;
+    @Positive(message = "Publication year must be a positive number")
     private int publicationYear;
     private String ISBN;
 
