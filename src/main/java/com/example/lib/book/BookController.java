@@ -1,6 +1,7 @@
 package com.example.lib.book;
 
 import com.example.lib.exceptions.BookNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +34,14 @@ public class BookController {
 
     // Add a new book to the library
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+    public ResponseEntity<Book> addBook(@Valid @RequestBody Book book) {
         Book savedBook = bookService.addBook(book);
         return ResponseEntity.ok(savedBook);
     }
 
     // Update an existing book's information
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<Book> updateBook(@PathVariable Long id,@RequestBody Map<String, Object> updates) {
         Book updatedBook = bookService.updateBook(id, updates);
         return ResponseEntity.ok(updatedBook);
     }

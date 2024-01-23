@@ -8,7 +8,12 @@ import java.util.Map;
 
 @Service
 public class BookService {
-    private final BookRepository bookRepository; // Assuming you have a repository interface
+    private final BookRepository bookRepository;
+    private BookValidator bookValidator;
+
+    public void BookValidator () {
+        this.bookValidator = new BookValidator();
+    }
 
     @Autowired
     public BookService(BookRepository bookRepository) {
@@ -30,6 +35,7 @@ public class BookService {
     public Book updateBook(Long id, Map<String, Object> updates) {
         Book book = bookRepository.findById(id.toString()).orElseThrow(() -> new BookNotFoundException(id.toString()));
 
+        bookValidator.validateUpdates(updates);
         applyUpdatesToBook(book, updates);
 
         return bookRepository.save(book);
@@ -72,4 +78,6 @@ public class BookService {
             }
         }
     }
+
+
 }
