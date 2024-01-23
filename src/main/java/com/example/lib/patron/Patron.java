@@ -2,6 +2,7 @@ package com.example.lib.patron;
 
 
 import com.example.lib.borrowingRecord.BorrowingRecord;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -23,6 +24,7 @@ public class Patron {
     private String contactInformation;
 
     @OneToMany(mappedBy = "patron")
+    @JsonManagedReference
     private List<BorrowingRecord> borrowingRecords;
 
     public Patron(Long id, String name, String contactInformation) {

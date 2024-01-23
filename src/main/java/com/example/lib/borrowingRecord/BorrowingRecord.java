@@ -2,6 +2,7 @@ package com.example.lib.borrowingRecord;
 
 import com.example.lib.book.Book;
 import com.example.lib.patron.Patron;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -17,11 +18,13 @@ public class BorrowingRecord {
     @NotNull(message = "Book cannot be null")
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
+    @JsonBackReference
     private Book book;
 
     @NotNull(message = "Patron cannot be null")
     @ManyToOne
     @JoinColumn(name = "patron_id", nullable = false)
+    @JsonBackReference
     private Patron patron;
 
     private LocalDate borrowingDate;
