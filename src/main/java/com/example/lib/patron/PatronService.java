@@ -1,9 +1,6 @@
 package com.example.lib.patron;
 
-import com.example.lib.book.Book;
-import com.example.lib.book.BookValidator;
-import com.example.lib.exceptions.BookNotFoundException;
-import com.example.lib.exceptions.PatronNotFoundException;
+import com.example.lib.exceptions.NoResourceFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +26,7 @@ public class PatronService {
 
     public Patron findPatronById(Long id) {
         return patronRepository.findById(id.toString())
-                .orElseThrow(() -> new PatronNotFoundException(id));
+                .orElseThrow(() -> new NoResourceFoundException("Patron not found with id:"+ id));
     }
 
     public Patron addPatron(Patron patron) {
@@ -37,7 +34,7 @@ public class PatronService {
     }
 
     public Patron updatePatron(Long id, @RequestBody Map<String, Object> updates) {
-        Patron patron = patronRepository.findById(id.toString()).orElseThrow(() -> new PatronNotFoundException(id));
+        Patron patron = patronRepository.findById(id.toString()).orElseThrow(() -> new NoResourceFoundException("Patron not found with id:"+ id));
         patronValidator.validateUpdates(updates);
 
         applyUpdatesToBook(patron, updates);
@@ -47,7 +44,7 @@ public class PatronService {
 
     public void deletePatron(Long id) {
         if (!patronRepository.existsById(id.toString())) {
-            throw new PatronNotFoundException(id);
+            throw new NoResourceFoundException("Patron not found with id:"+ id);
         }
         patronRepository.deleteById(id.toString());
     }

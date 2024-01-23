@@ -1,6 +1,6 @@
 package com.example.lib.book;
 
-import com.example.lib.exceptions.BookNotFoundException;
+import com.example.lib.exceptions.NoResourceFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -25,7 +25,7 @@ public class BookService {
     }
 
     public Book findBookById(String id) {
-        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+        return bookRepository.findById(id).orElseThrow(() -> new NoResourceFoundException("Book not found with id: " + id));
     }
 
     public Book addBook(Book book) {
@@ -33,7 +33,7 @@ public class BookService {
     }
 
     public Book updateBook(Long id, Map<String, Object> updates) {
-        Book book = bookRepository.findById(id.toString()).orElseThrow(() -> new BookNotFoundException(id.toString()));
+        Book book = bookRepository.findById(id.toString()).orElseThrow(() -> new NoResourceFoundException("Book not found with id: " + id));
 
         bookValidator.validateUpdates(updates);
         applyUpdatesToBook(book, updates);
@@ -43,7 +43,7 @@ public class BookService {
 
     public boolean deleteBook(String id) {
         if (!bookRepository.existsById(id)) {
-            throw new BookNotFoundException(id);
+            throw new NoResourceFoundException("Book not found with id: " + id);
         }
 
         bookRepository.deleteById(id);

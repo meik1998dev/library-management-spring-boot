@@ -14,14 +14,8 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(BookNotFoundException.class)
-    protected ResponseEntity<Object> handleBookNotFound(BookNotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        return buildResponseEntity(errorResponse);
-    }
-
-    @ExceptionHandler(PatronNotFoundException.class)
-    protected ResponseEntity<Object> handlePatronNotFound(PatronNotFoundException ex) {
+    @ExceptionHandler(NoResourceFoundException.class)
+    protected ResponseEntity<Object> handleNotFoundResource(NoResourceFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         return buildResponseEntity(errorResponse);
     }

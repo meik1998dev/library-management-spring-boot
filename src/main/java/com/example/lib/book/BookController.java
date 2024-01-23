@@ -1,6 +1,5 @@
 package com.example.lib.book;
 
-import com.example.lib.exceptions.BookNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
