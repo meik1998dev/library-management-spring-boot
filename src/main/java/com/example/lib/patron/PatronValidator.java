@@ -8,7 +8,7 @@ import java.util.Map;
 @Service
 public class PatronValidator {
 
-    public void validateName(Object value) {
+    private void validateName(Object value) {
         if (!(value instanceof String name)) {
             throw new ValidationException("Name must be a string");
         }
@@ -20,7 +20,7 @@ public class PatronValidator {
         }
     }
 
-    public void ValidateContactInformation(Object value) {
+    private void ValidateContactInformation(Object value) {
         if (!(value instanceof String contactInformation)) {
             throw new ValidationException("Name must be a string");
         }

@@ -9,15 +9,12 @@ import java.util.Map;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
-    private BookValidator bookValidator;
-
-    public void BookValidator () {
-        this.bookValidator = new BookValidator();
-    }
+    private final BookValidator bookValidator;
 
     @Autowired
-    public BookService(BookRepository bookRepository) {
+    public BookService(BookRepository bookRepository , BookValidator bookValidator) {
         this.bookRepository = bookRepository;
+        this.bookValidator = bookValidator;
     }
 
     public List<Book> findAllBooks() {

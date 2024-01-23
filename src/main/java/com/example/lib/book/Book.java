@@ -1,6 +1,7 @@
 package com.example.lib.book;
 
 import com.example.lib.borrowingRecord.BorrowingRecord;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +27,7 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @JsonIgnore
     private List<BorrowingRecord> borrowingRecords;
 
     public Book() {}

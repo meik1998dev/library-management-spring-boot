@@ -20,7 +20,7 @@ public class BorrowingRecordController {
 
     // Allow a patron to borrow a book
     @PostMapping("/borrow/{bookId}/patron/{patronId}")
-    public ResponseEntity<?> borrowBook(@Valid @PathVariable Long bookId,@Valid @PathVariable Long patronId) {
+    public ResponseEntity<ApiResponse> borrowBook(@Valid @PathVariable Long bookId,@Valid @PathVariable Long patronId) {
         borrowService.borrowBook(bookId, patronId);
         ApiResponse apiResponse = new ApiResponse(true, "Book borrowed successfully");
         return ResponseEntity.ok(apiResponse);
@@ -28,7 +28,7 @@ public class BorrowingRecordController {
 
     // Record the return of a borrowed book by a patron
     @PutMapping("/return/{bookId}/patron/{patronId}")
-    public ResponseEntity<?> returnBook(@Valid @PathVariable Long bookId,@Valid @PathVariable Long patronId) {
+    public ResponseEntity<ApiResponse> returnBook(@Valid @PathVariable Long bookId,@Valid @PathVariable Long patronId) {
         borrowService.returnBook(bookId, patronId);
         ApiResponse apiResponse = new ApiResponse(true, "Book returned successfully");
         return ResponseEntity.ok(apiResponse);
