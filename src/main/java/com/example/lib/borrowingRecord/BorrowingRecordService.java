@@ -5,6 +5,7 @@ import com.example.lib.book.BookRepository;
 import com.example.lib.exceptions.NoResourceFoundException;
 import com.example.lib.patron.Patron;
 import com.example.lib.patron.PatronRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class BorrowingRecordService {
         this.borrowingRecordRepository = borrowingRecordRepository;
     }
 
+    @Transactional
     public void borrowBook(Long bookId, Long patronId) {
         Book book = bookRepository.findById(bookId.toString())
                 .orElseThrow(() -> new NoResourceFoundException("Book not found with id: " + bookId));
@@ -30,7 +32,6 @@ public class BorrowingRecordService {
         Patron patron = patronRepository.findById(patronId.toString())
                 .orElseThrow(() -> new NoResourceFoundException("Patron not found with id: " + patronId));
 
-        // Check if the book is available for borrowing
         if (!isBookAvailableForBorrow(book)) {
             throw new NoResourceFoundException("Book is not available for borrowing.");
         }
@@ -43,6 +44,7 @@ public class BorrowingRecordService {
         borrowingRecordRepository.save(record);
     }
 
+    @Transactional
     public void returnBook(Long bookId, Long patronId) {
         Book book = bookRepository.findById(bookId.toString())
                 .orElseThrow(() -> new NoResourceFoundException("Book not found with id: " + bookId));
@@ -50,11 +52,9 @@ public class BorrowingRecordService {
         Patron patron = patronRepository.findById(patronId.toString())
                 .orElseThrow(() -> new NoResourceFoundException("Patron not found with id: " + patronId));
 
-        // Find the borrowing record for the given book and patron
         BorrowingRecord record = borrowingRecordRepository.findByBookAndPatronAndReturnDateIsNull(book, patron)
                 .orElseThrow(() -> new NoResourceFoundException("No borrowing record found for this book and patron."));
 
-        // Update the return date in the borrowing record
         record.setReturnDate(LocalDate.now());
         borrowingRecordRepository.save(record);
     }
