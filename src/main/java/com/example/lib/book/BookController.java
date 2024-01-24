@@ -1,6 +1,6 @@
 package com.example.lib.book;
 
-import com.example.lib.ApiResponse.ApiResponse;
+import com.example.lib.apiResponse.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

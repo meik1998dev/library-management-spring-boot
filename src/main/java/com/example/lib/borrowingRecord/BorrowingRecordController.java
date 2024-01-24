@@ -1,6 +1,6 @@
 package com.example.lib.borrowingRecord;
 
-import com.example.lib.ApiResponse.ApiResponse;
+import com.example.lib.apiResponse.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

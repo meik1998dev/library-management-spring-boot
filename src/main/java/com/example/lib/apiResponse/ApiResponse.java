@@ -1,4 +1,4 @@
-package com.example.lib.ApiResponse;
+package com.example.lib.apiResponse;
 
 public class ApiResponse {
     private boolean success;
