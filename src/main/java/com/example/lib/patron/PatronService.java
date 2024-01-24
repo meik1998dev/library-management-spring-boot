@@ -2,6 +2,9 @@ package com.example.lib.patron;
 
 import com.example.lib.exceptions.NoResourceFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -20,19 +23,23 @@ public class PatronService {
         this.patronRepository = patronRepository;
     }
 
+    @Cacheable(value = "patrons")
     public List<Patron> findAllPatrons() {
         return patronRepository.findAll();
     }
 
+    @Cacheable(value = "patrons" , key = "#id")
     public Patron findPatronById(Long id) {
         return patronRepository.findById(id.toString())
                 .orElseThrow(() -> new NoResourceFoundException("Patron not found with id:"+ id));
     }
 
+    @CachePut(value = "patrons" , key = "#patron.id")
     public Patron addPatron(Patron patron) {
         return patronRepository.save(patron);
     }
 
+    @CachePut(value = "patrons" , key = "#id")
     public Patron updatePatron(Long id, @RequestBody Map<String, Object> updates) {
         Patron patron = patronRepository.findById(id.toString()).orElseThrow(() -> new NoResourceFoundException("Patron not found with id:"+ id));
         patronValidator.validateUpdates(updates);
@@ -42,6 +49,7 @@ public class PatronService {
         return patronRepository.save(patron);
     }
 
+    @CacheEvict(value = "patrons" , key = "#id")
     public void deletePatron(Long id) {
         if (!patronRepository.existsById(id.toString())) {
             throw new NoResourceFoundException("Patron not found with id:"+ id);

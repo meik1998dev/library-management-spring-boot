@@ -2,6 +2,9 @@ package com.example.lib.book;
 
 import com.example.lib.exceptions.NoResourceFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -17,18 +20,23 @@ public class BookService {
         this.bookValidator = bookValidator;
     }
 
+    @Cacheable(value = "books")
     public List<Book> findAllBooks() {
         return bookRepository.findAll();
     }
 
+    @Cacheable(value = "books", key = "#id")
     public Book findBookById(String id) {
         return bookRepository.findById(id).orElseThrow(() -> new NoResourceFoundException("Book not found with id: " + id));
     }
 
+    @CachePut(value = "books", key = "#book.id")
     public Book addBook(Book book) {
         return bookRepository.save(book);
     }
 
+
+    @CachePut(value = "books", key = "#id")
     public Book updateBook(Long id, Map<String, Object> updates) {
         Book book = bookRepository.findById(id.toString()).orElseThrow(() -> new NoResourceFoundException("Book not found with id: " + id));
 
@@ -38,6 +46,7 @@ public class BookService {
         return bookRepository.save(book);
     }
 
+    @CacheEvict(value = "books", key = "#id")
     public boolean deleteBook(String id) {
         if (!bookRepository.existsById(id)) {
             throw new NoResourceFoundException("Book not found with id: " + id);
