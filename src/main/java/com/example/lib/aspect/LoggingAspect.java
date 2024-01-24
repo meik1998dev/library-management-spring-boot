@@ -1,11 +1,8 @@
 package com.example.lib.aspect;
 
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -39,4 +36,18 @@ public class LoggingAspect {
         System.out.println("Method " + methodName + " returns: " + result);
     }
 
+    @Around("controllerAndServiceMethods()")
+    public Object logPerformanceMetrics(ProceedingJoinPoint joinPoint) throws Throwable {
+        long startTime = System.currentTimeMillis();
+
+        // Proceed with method execution
+        Object result = joinPoint.proceed();
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        System.out.println("Execution of " + joinPoint.getSignature().getName() + " took " + duration + " ms");
+
+        return result;
+    }
 }
